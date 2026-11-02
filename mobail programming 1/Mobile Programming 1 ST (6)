@@ -1,0 +1,1019 @@
+# جزوه درس برنامه‌نویسی موبایل ۱
+## جلسه ششم: مدیریت صفحات، مسیریابی و طراحی فرم در Flutter
+
+**مدرس: سید سعید محمدی**
+
+---
+
+# بخش اول: مفاهیم پایه
+
+## ۱. اپلیکیشن چندصفحه‌ای چیست؟
+
+**سؤال ۱: منظور از اپلیکیشن چندصفحه‌ای چیست؟**
+
+اپلیکیشن چندصفحه‌ای (Multi-Screen Application) برنامه‌ای است که از چند صفحه یا بخش مختلف تشکیل شده است و کاربر می‌تواند بین آن‌ها جابه‌جا شود.
+
+برای مثال، یک اپلیکیشن دانشگاهی ممکن است صفحات زیر را داشته باشد:
+
+1. صفحه ورود (Login)
+2. صفحه ثبت‌نام (Register)
+3. صفحه اصلی (Home)
+4. صفحه اطلاعات دانشجو (Profile)
+5. صفحه انتخاب واحد (Course Selection)
+6. صفحه تنظیمات (Settings)
+
+در برنامه‌نویسی موبایل، مدیریت صحیح ارتباط بین صفحات اهمیت زیادی دارد.
+
+**سؤال ۲: چرا اپلیکیشن‌ها به چند صفحه تقسیم می‌شوند؟**
+
+دلایل اصلی عبارت‌اند از:
+
+- تفکیک وظایف و قابلیت‌های برنامه
+- افزایش خوانایی کد
+- ساده‌تر شدن طراحی رابط کاربری
+- مدیریت بهتر اطلاعات
+- افزایش قابلیت توسعه و نگهداری برنامه
+- بهبود تجربه کاربری (UX)
+
+## ۲. مفهوم Navigation در Flutter
+
+**سؤال ۳: Navigation چیست؟**
+
+Navigation به فرایند جابه‌جایی کاربر بین صفحات مختلف اپلیکیشن گفته می‌شود.
+
+در Flutter برای مدیریت مسیرهای صفحات از کلاس `Navigator` استفاده می‌کنیم.
+
+هر صفحه در Flutter معمولاً به‌صورت یک Widget تعریف می‌شود.
+
+**سؤال ۴: Navigator چیست؟**
+
+`Navigator` یک Widget مدیریتی است که صفحات برنامه را در قالب یک پشته (Stack) مدیریت می‌کند.
+
+این پشته از ساختار LIFO پیروی می‌کند:
+
+Last In, First Out
+
+یعنی آخرین صفحه‌ای که وارد پشته شده است، اولین صفحه‌ای خواهد بود که با عملیات بازگشت خارج می‌شود.
+
+## ۳. انتقال بین صفحات با Navigator.push
+
+**سؤال ۵: چگونه از یک صفحه به صفحه دیگر برویم؟**
+
+برای باز کردن یک صفحه جدید از دستور `Navigator.push()` استفاده می‌کنیم.
+
+مثال:
+
+```dart
+Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => SecondPage(),
+  ),
+);
+```
+
+در این مثال:
+
+- `context` اطلاعات مربوط به موقعیت Widget در درخت Widgetها را مشخص می‌کند.
+- `MaterialPageRoute` مسیر انتقال به صفحه جدید را تعریف می‌کند.
+- `SecondPage()` صفحه مقصد است.
+
+### مثال عملی: ساخت دو صفحه
+
+ابتدا صفحه اصلی را ایجاد می‌کنیم:
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home Page'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SecondPage(),
+              ),
+            );
+          },
+          child: const Text('Go to Second Page'),
+        ),
+      ),
+    );
+  }
+}
+
+class SecondPage extends StatelessWidget {
+  const SecondPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second Page'),
+      ),
+      body: const Center(
+        child: Text('Welcome to Second Page'),
+      ),
+    );
+  }
+}
+```
+
+در این برنامه با کلیک روی دکمه، صفحه دوم باز می‌شود.
+
+## ۴. بازگشت به صفحه قبلی با Navigator.pop
+
+**سؤال ۶: چگونه به صفحه قبلی بازگردیم؟**
+
+برای بازگشت از `Navigator.pop()` استفاده می‌کنیم.
+
+```dart
+Navigator.pop(context);
+```
+
+مثال:
+
+```dart
+ElevatedButton(
+  onPressed: () {
+    Navigator.pop(context);
+  },
+  child: const Text('Back'),
+)
+```
+
+این دستور صفحه فعلی را از پشته Navigator خارج می‌کند.
+
+**سؤال ۷: تفاوت Navigator.push و Navigator.pop چیست؟**
+
+| دستور | کاربرد |
+|---|---|
+| `Navigator.push()` | باز کردن صفحه جدید |
+| `Navigator.pop()` | بستن صفحه فعلی و بازگشت |
+| `Navigator.pushReplacement()` | جایگزین کردن صفحه فعلی با صفحه جدید |
+| `Navigator.pushAndRemoveUntil()` | باز کردن صفحه جدید و حذف صفحات قبلی طبق شرط |
+
+### مثال استفاده از pushReplacement
+
+فرض کنید کاربر با موفقیت وارد حساب کاربری شده و دیگر نباید با دکمه بازگشت به صفحه ورود برگردد.
+
+```dart
+Navigator.pushReplacement(
+  context,
+  MaterialPageRoute(
+    builder: (context) => const HomePage(),
+  ),
+);
+```
+
+## ۵. انتقال اطلاعات بین صفحات
+
+**سؤال ۸: چگونه اطلاعات را از یک صفحه به صفحه دیگر ارسال کنیم؟**
+
+یکی از روش‌های ساده، ارسال اطلاعات از طریق پارامترهای سازنده (Constructor Parameters) است.
+
+مثال:
+
+```dart
+class ProfilePage extends StatelessWidget {
+
+  final String name;
+  final int age;
+
+  const ProfilePage({
+    super.key,
+    required this.name,
+    required this.age,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Text(
+          'Name: $name - Age: $age',
+        ),
+      ),
+    );
+  }
+}
+```
+
+برای باز کردن این صفحه:
+
+```dart
+Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => const ProfilePage(
+      name: 'Ali',
+      age: 22,
+    ),
+  ),
+);
+```
+
+در این مثال نام و سن کاربر به صفحه پروفایل ارسال می‌شوند.
+
+**سؤال ۹: چگونه از صفحه دوم به صفحه اول اطلاعات برگردانیم؟**
+
+می‌توانیم هنگام خروج از صفحه دوم، یک مقدار را با `Navigator.pop()` برگردانیم.
+
+مثال در صفحه دوم:
+
+```dart
+Navigator.pop(context, 'Success');
+```
+
+دریافت نتیجه در صفحه اول:
+
+```dart
+final result = await Navigator.push<String>(
+  context,
+  MaterialPageRoute(
+    builder: (context) => const SecondPage(),
+  ),
+);
+
+print(result);
+```
+
+در اینجا `await` منتظر بازگشت نتیجه از صفحه دوم می‌ماند.
+
+---
+
+# بخش دوم: طراحی فرم در Flutter
+
+## ۶. فرم چیست؟
+
+**سؤال ۱۰: Form در برنامه‌نویسی موبایل چه کاربردی دارد؟**
+
+Form یا فرم، بخشی از رابط کاربری است که برای دریافت اطلاعات از کاربر استفاده می‌شود.
+
+نمونه‌های رایج فرم:
+
+- فرم ورود به حساب کاربری
+- فرم ثبت‌نام
+- فرم ثبت اطلاعات دانشجو
+- فرم ارسال درخواست
+- فرم ثبت سفارش
+- فرم ویرایش پروفایل
+
+## ۷. Widget مربوط به Form
+
+**سؤال ۱۱: در Flutter برای ساخت فرم از چه Widgetهایی استفاده می‌کنیم؟**
+
+مهم‌ترین Widgetهای مورد استفاده عبارت‌اند از:
+
+| Widget | کاربرد |
+|---|---|
+| `Form` | مدیریت مجموعه فیلدهای فرم |
+| `TextFormField` | دریافت اطلاعات متنی همراه با اعتبارسنجی |
+| `TextField` | دریافت اطلاعات متنی بدون مدیریت داخلی اعتبارسنجی Form |
+| `ElevatedButton` | ایجاد دکمه |
+| `DropdownButtonFormField` | انتخاب یک گزینه از فهرست |
+| `Checkbox` | انتخاب یا عدم انتخاب یک گزینه |
+
+## ۸. تفاوت TextField و TextFormField
+
+**سؤال ۱۲: تفاوت TextField و TextFormField چیست؟**
+
+هر دو برای دریافت اطلاعات متنی استفاده می‌شوند؛ اما `TextFormField` برای استفاده درون `Form` طراحی شده و از قابلیت‌هایی مانند اعتبارسنجی با `validator` پشتیبانی می‌کند.
+
+مثال TextField:
+
+```dart
+TextField(
+  decoration: const InputDecoration(
+    labelText: 'Username',
+  ),
+)
+```
+
+مثال TextFormField:
+
+```dart
+TextFormField(
+  decoration: const InputDecoration(
+    labelText: 'Username',
+  ),
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return 'Username is required';
+    }
+
+    return null;
+  },
+)
+```
+
+## ۹. اعتبارسنجی اطلاعات (Validation)
+
+**سؤال ۱۳: Validation چیست؟**
+
+اعتبارسنجی اطلاعات فرایندی است که طی آن بررسی می‌کنیم داده‌های واردشده توسط کاربر شرایط مورد انتظار برنامه را داشته باشند.
+
+برای مثال:
+
+- نام کاربری نباید خالی باشد.
+- ایمیل باید قالب معتبر داشته باشد.
+- رمز عبور باید حداقل طول مشخصی داشته باشد.
+- شماره تلفن باید قالب قابل قبول داشته باشد.
+
+اعتبارسنجی باعث کاهش خطاهای ورودی و افزایش کیفیت داده‌ها می‌شود.
+
+**سؤال ۱۴: validator چیست؟**
+
+`validator` یک تابع است که مقدار واردشده را بررسی می‌کند.
+
+اگر مقدار معتبر باشد، `null` برمی‌گرداند؛ در غیر این صورت، پیام خطا را به شکل String برمی‌گرداند.
+
+مثال:
+
+```dart
+validator: (value) {
+  if (value == null || value.isEmpty) {
+    return 'This field is required';
+  }
+
+  if (value.length < 3) {
+    return 'Minimum 3 characters';
+  }
+
+  return null;
+}
+```
+
+## ۱۰. استفاده از GlobalKey برای مدیریت فرم
+
+**سؤال ۱۵: GlobalKey<FormState> چیست؟**
+
+برای دسترسی به وضعیت یک Form از `GlobalKey<FormState>` استفاده می‌کنیم.
+
+با استفاده از این کلید می‌توانیم فرم را اعتبارسنجی یا بازنشانی کنیم.
+
+تعریف:
+
+```dart
+final _formKey = GlobalKey<FormState>();
+```
+
+اتصال به Form:
+
+```dart
+Form(
+  key: _formKey,
+  child: Column(
+    children: [
+      // Form Fields
+    ],
+  ),
+)
+```
+
+اعتبارسنجی فرم:
+
+```dart
+if (_formKey.currentState!.validate()) {
+  print('Form is valid');
+}
+```
+
+## ۱۱. مثال عملی: ساخت فرم ثبت‌نام
+
+در این مثال یک فرم ساده ثبت‌نام ایجاد می‌کنیم که شامل نام، ایمیل و رمز عبور است.
+
+```dart
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const RegisterApp());
+}
+
+class RegisterApp extends StatelessWidget {
+  const RegisterApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const RegisterPage(),
+    );
+  }
+}
+
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+
+  final _formKey = GlobalKey<FormState>();
+
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  void register() {
+    if (_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Registration successful'),
+        ),
+      );
+
+      print(nameController.text);
+      print(emailController.text);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Register'),
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+
+        child: Form(
+          key: _formKey,
+
+          child: Column(
+            children: [
+
+              TextFormField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Full Name',
+                  border: OutlineInputBorder(),
+                ),
+
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Name is required';
+                  }
+
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 15),
+
+              TextFormField(
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(),
+                ),
+
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Email is required';
+                  }
+
+                  if (!RegExp(
+                    r'^[^@]+@[^@]+\.[^@]+$',
+                  ).hasMatch(value.trim())) {
+                    return 'Invalid email';
+                  }
+
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 15),
+
+              TextFormField(
+                controller: passwordController,
+                obscureText: true,
+
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(),
+                ),
+
+                validator: (value) {
+                  if (value == null || value.length < 8) {
+                    return 'Password must be at least 8 characters';
+                  }
+
+                  return null;
+                },
+              ),
+
+              const SizedBox(height: 20),
+
+              ElevatedButton(
+                onPressed: register,
+                child: const Text('Register'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+```
+
+**تحلیل برنامه:**
+
+1. `GlobalKey<FormState>` وضعیت فرم را مدیریت می‌کند.
+2. `TextEditingController` مقدار فیلدها را دریافت می‌کند.
+3. `TextFormField` ورودی‌های متنی را نمایش می‌دهد.
+4. `validator` اطلاعات را بررسی می‌کند.
+5. `validate()` تمام فیلدهای دارای اعتبارسنجی را بررسی می‌کند.
+6. `obscureText` باعث مخفی شدن رمز عبور می‌شود.
+7. `dispose()` منابع مربوط به Controllerها را آزاد می‌کند.
+
+نکته امنیتی: اعتبارسنجی سمت برنامه موبایل کافی نیست؛ اطلاعات باید در سمت سرور نیز اعتبارسنجی شوند.
+
+---
+
+# بخش سوم: ابزارها و مفاهیم تکمیلی
+
+## ۱۲. TextEditingController
+
+**سؤال ۱۶: TextEditingController چیست؟**
+
+این کلاس برای کنترل و دسترسی به مقدار واردشده در فیلدهای متنی استفاده می‌شود.
+
+مثال:
+
+```dart
+final controller = TextEditingController();
+```
+
+اتصال به فیلد:
+
+```dart
+TextField(
+  controller: controller,
+)
+```
+
+دریافت مقدار:
+
+```dart
+print(controller.text);
+```
+
+تغییر مقدار:
+
+```dart
+controller.text = 'Hello Flutter';
+```
+
+پاک کردن مقدار:
+
+```dart
+controller.clear();
+```
+
+## ۱۳. مدیریت صفحه‌کلید موبایل
+
+**سؤال ۱۷: چگونه نوع صفحه‌کلید را در Flutter مشخص کنیم؟**
+
+از ویژگی `keyboardType` استفاده می‌کنیم.
+
+مثال:
+
+```dart
+TextField(
+  keyboardType: TextInputType.number,
+)
+```
+
+انواع پرکاربرد:
+
+| مقدار | کاربرد |
+|---|---|
+| `TextInputType.text` | متن عمومی |
+| `TextInputType.number` | اعداد |
+| `TextInputType.phone` | شماره تلفن |
+| `TextInputType.emailAddress` | ایمیل |
+| `TextInputType.url` | آدرس اینترنتی |
+| `TextInputType.datetime` | تاریخ و زمان |
+
+## ۱۴. نمایش پیام به کاربر با SnackBar
+
+**سؤال ۱۸: SnackBar چیست؟**
+
+SnackBar یک پیام کوتاه است که معمولاً در پایین صفحه نمایش داده می‌شود.
+
+مثال:
+
+```dart
+ScaffoldMessenger.of(context).showSnackBar(
+  const SnackBar(
+    content: Text('Data saved successfully'),
+  ),
+);
+```
+
+کاربردها:
+
+- اعلام موفقیت عملیات
+- نمایش خطا
+- اطلاع‌رسانی کوتاه
+- نمایش نتیجه یک عملیات
+
+## ۱۵. Dialog در Flutter
+
+**سؤال ۱۹: Dialog چیست؟**
+
+Dialog یک پنجره محاوره‌ای است که روی صفحه فعلی نمایش داده می‌شود و برای دریافت تأیید یا نمایش اطلاعات کاربرد دارد.
+
+مثال:
+
+```dart
+showDialog(
+  context: context,
+  builder: (context) {
+    return AlertDialog(
+      title: const Text('Confirm'),
+      content: const Text('Are you sure?'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('OK'),
+        ),
+      ],
+    );
+  },
+);
+```
+
+## ۱۶. ساختار پیشنهادی یک اپلیکیشن چندصفحه‌ای
+
+برای یک اپلیکیشن دانشگاهی می‌توان ساختار زیر را در نظر گرفت:
+
+```text
+lib/
+│
+├── main.dart
+│
+├── pages/
+│   ├── login_page.dart
+│   ├── register_page.dart
+│   ├── home_page.dart
+│   └── profile_page.dart
+│
+├── widgets/
+│   ├── custom_button.dart
+│   └── custom_text_field.dart
+│
+└── models/
+    └── student.dart
+```
+
+تقسیم کد به فایل‌های جداگانه باعث می‌شود توسعه و نگهداری پروژه آسان‌تر شود.
+
+---
+
+# بخش چهارم: تمرین‌های عملی
+
+### تمرین اول: اپلیکیشن دوصفحه‌ای
+
+یک برنامه طراحی کنید که صفحه اول دارای یک دکمه باشد. با کلیک روی دکمه، صفحه دوم باز شود و نام دانشجو در آن نمایش داده شود.
+
+### تمرین دوم: فرم ورود
+
+فرمی طراحی کنید که شامل موارد زیر باشد:
+
+- نام کاربری
+- رمز عبور
+- دکمه ورود
+
+شرایط:
+- نام کاربری نباید خالی باشد.
+- رمز عبور باید حداقل ۸ کاراکتر داشته باشد.
+- در صورت موفقیت، پیام ورود نمایش داده شود.
+
+### تمرین سوم: فرم ثبت اطلاعات دانشجو
+
+فرمی با فیلدهای زیر طراحی کنید:
+
+- نام و نام خانوادگی
+- شماره دانشجویی
+- رشته تحصیلی
+- شماره تلفن
+- ایمیل
+
+برای هر فیلد اعتبارسنجی مناسب تعریف کنید.
+
+### تمرین چهارم: ارسال اطلاعات بین صفحات
+
+صفحه‌ای طراحی کنید که نام و سن کاربر را دریافت کند و پس از کلیک روی دکمه، اطلاعات را به صفحه پروفایل ارسال کند.
+
+### تمرین پنجم: Dialog تأیید خروج
+
+برنامه‌ای طراحی کنید که هنگام کلیک روی دکمه خروج، یک Dialog نمایش دهد و از کاربر تأیید بگیرد.
+
+### تمرین ششم: اپلیکیشن مدیریت دانشجو
+
+یک اپلیکیشن کوچک طراحی کنید که دارای سه صفحه باشد:
+
+1. صفحه اصلی
+2. صفحه ثبت دانشجو
+3. صفحه نمایش اطلاعات دانشجو
+
+اطلاعات واردشده باید از صفحه ثبت به صفحه نمایش منتقل شوند.
+
+---
+
+# بخش پنجم: ۵۰ نمونه سؤال جدید همراه با پاسخ
+
+## قسمت اول: سؤالات مفهومی Flutter و Navigation
+
+**سؤال ۱: منظور از Multi-Screen Application چیست؟**
+
+پاسخ: اپلیکیشنی که از چند صفحه تشکیل شده و کاربر می‌تواند بین صفحات آن جابه‌جا شود.
+
+**سؤال ۲: Navigation در Flutter چه کاربردی دارد؟**
+
+پاسخ: برای مدیریت انتقال کاربر بین صفحات مختلف اپلیکیشن استفاده می‌شود.
+
+**سؤال ۳: کلاس Navigator چه ساختاری برای مدیریت صفحات دارد؟**
+
+پاسخ: از ساختار پشته یا Stack استفاده می‌کند.
+
+**سؤال ۴: مفهوم LIFO در Navigator چیست؟**
+
+پاسخ: آخرین صفحه‌ای که وارد پشته شده، اولین صفحه‌ای است که هنگام بازگشت خارج می‌شود.
+
+**سؤال ۵: کدام دستور برای باز کردن یک صفحه جدید استفاده می‌شود؟**
+
+پاسخ: `Navigator.push()`.
+
+**سؤال ۶: کدام دستور برای بازگشت به صفحه قبلی استفاده می‌شود؟**
+
+پاسخ: `Navigator.pop()`.
+
+**سؤال ۷: کاربرد MaterialPageRoute چیست؟**
+
+پاسخ: تعریف مسیر انتقال به یک صفحه جدید با رفتار متناسب با طراحی Material.
+
+**سؤال ۸: تفاوت push و pushReplacement چیست؟**
+
+پاسخ: `push` صفحه جدید را روی صفحه فعلی قرار می‌دهد؛ اما `pushReplacement` صفحه فعلی را با صفحه جدید جایگزین می‌کند.
+
+**سؤال ۹: چرا گاهی باید صفحات قبلی را از پشته حذف کنیم؟**
+
+پاسخ: برای جلوگیری از بازگشت کاربر به صفحات قبلی، مانند صفحه ورود پس از ورود موفق.
+
+**سؤال ۱۰: منظور از context در Navigator چیست؟**
+
+پاسخ: شیئی از نوع BuildContext است که موقعیت Widget را در درخت Widgetها مشخص می‌کند و برای دسترسی به Navigator مورد استفاده قرار می‌گیرد.
+
+## قسمت دوم: سؤالات مربوط به فرم و اعتبارسنجی
+
+**سؤال ۱۱: Form در Flutter چه کاربردی دارد؟**
+
+پاسخ: مدیریت مجموعه‌ای از فیلدهای ورودی و اعتبارسنجی آن‌ها.
+
+**سؤال ۱۲: تفاوت TextField و TextFormField چیست؟**
+
+پاسخ: TextField برای دریافت ورودی متنی است؛ TextFormField علاوه بر دریافت ورودی، قابلیت اعتبارسنجی با validator و همکاری با Form را فراهم می‌کند.
+
+**سؤال ۱۳: Validation چیست؟**
+
+پاسخ: فرایند بررسی صحت و معتبر بودن اطلاعات واردشده توسط کاربر.
+
+**سؤال ۱۴: تابع validator چه چیزی برمی‌گرداند؟**
+
+پاسخ: در صورت معتبر بودن مقدار، `null` و در صورت نامعتبر بودن، پیام خطا را برمی‌گرداند.
+
+**سؤال ۱۵: GlobalKey<FormState> چه کاربردی دارد؟**
+
+پاسخ: برای دسترسی به وضعیت Form و اجرای عملیات‌هایی مانند اعتبارسنجی و بازنشانی فرم.
+
+**سؤال ۱۶: متد validate() چه کاری انجام می‌دهد؟**
+
+پاسخ: اعتبارسنجی تمام فیلدهای دارای validator در فرم را اجرا می‌کند.
+
+**سؤال ۱۷: اگر validator مقدار null برگرداند چه مفهومی دارد؟**
+
+پاسخ: مقدار واردشده از نظر قواعد تعریف‌شده معتبر است.
+
+**سؤال ۱۸: TextEditingController چه کاربردی دارد؟**
+
+پاسخ: دریافت، خواندن، تغییر و پاک کردن مقدار فیلدهای متنی.
+
+**سؤال ۱۹: کاربرد ویژگی obscureText چیست؟**
+
+پاسخ: مخفی کردن متن ورودی، معمولاً برای فیلد رمز عبور.
+
+**سؤال ۲۰: چگونه مقدار یک TextEditingController را دریافت می‌کنیم؟**
+
+پاسخ: با استفاده از ویژگی `controller.text`.
+
+## قسمت سوم: سؤالات مربوط به رابط کاربری و ابزارها
+
+**سؤال ۲۱: keyboardType چه کاربردی دارد؟**
+
+پاسخ: نوع صفحه‌کلید نمایش‌داده‌شده برای دریافت ورودی را مشخص می‌کند.
+
+**سؤال ۲۲: برای دریافت شماره تلفن از چه نوع keyboardType استفاده می‌شود؟**
+
+پاسخ: `TextInputType.phone`.
+
+**سؤال ۲۳: برای دریافت ایمیل از چه نوع keyboardType استفاده می‌شود؟**
+
+پاسخ: `TextInputType.emailAddress`.
+
+**سؤال ۲۴: SnackBar چیست؟**
+
+پاسخ: پیام کوتاهی است که معمولاً در پایین صفحه برای اطلاع‌رسانی به کاربر نمایش داده می‌شود.
+
+**سؤال ۲۵: Dialog چه کاربردی دارد؟**
+
+پاسخ: نمایش پنجره محاوره‌ای برای اطلاع‌رسانی، دریافت تأیید یا انتخاب کاربر.
+
+**سؤال ۲۶: AlertDialog چیست؟**
+
+پاسخ: یک نوع Dialog آماده در Flutter برای نمایش عنوان، محتوا و دکمه‌های عملیاتی.
+
+**سؤال ۲۷: برای نمایش Dialog از چه تابعی استفاده می‌شود؟**
+
+پاسخ: `showDialog()`.
+
+**سؤال ۲۸: SizedBox چه کاربردی دارد؟**
+
+پاسخ: ایجاد فاصله یا تعیین ابعاد مشخص برای یک Widget.
+
+**سؤال ۲۹: Scaffold چه نقشی در طراحی صفحات دارد؟**
+
+پاسخ: ساختار اصلی یک صفحه Material مانند AppBar، Body، Drawer و FloatingActionButton را فراهم می‌کند.
+
+**سؤال ۳۰: چرا استفاده از Widgetهای قابل استفاده مجدد مفید است؟**
+
+پاسخ: باعث کاهش تکرار کد، افزایش خوانایی و ساده‌تر شدن نگهداری برنامه می‌شود.
+
+## قسمت چهارم: سؤالات تحلیلی و برنامه‌نویسی
+
+**سؤال ۳۱: اگر کاربر در یک فرم هیچ اطلاعاتی وارد نکند، چگونه از ارسال فرم جلوگیری می‌کنیم؟**
+
+پاسخ: برای فیلدها validator تعریف می‌کنیم و قبل از ثبت اطلاعات، نتیجه `validate()` را بررسی می‌کنیم.
+
+**سؤال ۳۲: اگر بخواهیم رمز عبور کمتر از ۸ کاراکتر پذیرفته نشود، چه شرطی می‌نویسیم؟**
+
+پاسخ:
+
+```dart
+if (value == null || value.length < 8) {
+  return 'Password is too short';
+}
+```
+
+**سؤال ۳۳: چگونه اطلاعات یک صفحه را به صفحه دیگر ارسال می‌کنیم؟**
+
+پاسخ: می‌توانیم اطلاعات را از طریق پارامترهای سازنده Widget مقصد ارسال کنیم.
+
+**سؤال ۳۴: چگونه نتیجه یک صفحه را به صفحه قبلی برگردانیم؟**
+
+پاسخ: با ارسال مقدار در `Navigator.pop(context, result)` و دریافت نتیجه از Future مربوط به `Navigator.push()`.
+
+**سؤال ۳۵: چرا استفاده از await در دریافت نتیجه Navigator اهمیت دارد؟**
+
+پاسخ: چون عملیات بازگشت از صفحه مقصد غیرهم‌زمان است و await منتظر تکمیل آن می‌ماند.
+
+**سؤال ۳۶: اگر بخواهیم مقدار یک فیلد متنی را پاک کنیم، از چه دستوری استفاده می‌کنیم؟**
+
+پاسخ:
+
+```dart
+controller.clear();
+```
+
+**سؤال ۳۷: چرا باید TextEditingController را در dispose آزاد کنیم؟**
+
+پاسخ: برای آزادسازی منابع و جلوگیری از باقی ماندن منابع غیرضروری در حافظه.
+
+**سؤال ۳۸: چرا نباید تمام صفحات برنامه را در یک فایل بزرگ قرار دهیم؟**
+
+پاسخ: زیرا باعث افزایش پیچیدگی، کاهش خوانایی و دشوار شدن توسعه و نگهداری می‌شود.
+
+**سؤال ۳۹: آیا اعتبارسنجی سمت موبایل برای امنیت اطلاعات کافی است؟**
+
+پاسخ: خیر. اعتبارسنجی سمت سرور نیز ضروری است؛ زیرا کاربر می‌تواند محدودیت‌های سمت کلاینت را دور بزند.
+
+**سؤال ۴۰: تفاوت اعتبارسنجی (Validation) و پاک‌سازی ورودی (Sanitization) چیست؟**
+
+پاسخ: Validation بررسی می‌کند داده با قواعد مورد انتظار سازگار است یا خیر؛ Sanitization داده را برای کاهش خطر یا تبدیل به قالب مناسب پاک‌سازی و اصلاح می‌کند.
+
+## قسمت پنجم: سؤالات کاربردی و سناریومحور
+
+**سؤال ۴۱: برای ساخت صفحه ورود و انتقال کاربر به صفحه اصلی از چه روشی استفاده می‌کنیم؟**
+
+پاسخ: پس از اعتبارسنجی موفق فرم، با `Navigator.pushReplacement()` به صفحه اصلی منتقل می‌شویم.
+
+**سؤال ۴۲: اگر بخواهیم کاربر پس از خروج از حساب نتواند با دکمه بازگشت وارد صفحه اصلی شود، چه کاری انجام می‌دهیم؟**
+
+پاسخ: صفحه ورود را جایگزین صفحه فعلی می‌کنیم و در صورت نیاز، سایر صفحات محافظت‌شده را نیز از پشته حذف می‌کنیم.
+
+**سؤال ۴۳: برای انتخاب رشته تحصیلی از یک فهرست گزینه‌ها از چه Widgetی می‌توان استفاده کرد؟**
+
+پاسخ: `DropdownButtonFormField`.
+
+**سؤال ۴۴: برای نمایش پیام «ثبت اطلاعات با موفقیت انجام شد» کدام ابزار مناسب است؟**
+
+پاسخ: SnackBar.
+
+**سؤال ۴۵: برای پرسیدن سؤال «آیا از حذف اطلاعات مطمئن هستید؟» کدام ابزار مناسب است؟**
+
+پاسخ: AlertDialog.
+
+**سؤال ۴۶: اگر یک صفحه نیاز به تغییر رابط کاربری بر اساس اطلاعات ورودی داشته باشد، از چه نوع Widgetی استفاده می‌کنیم؟**
+
+پاسخ: معمولاً StatefulWidget؛ زیرا وضعیت داخلی آن با استفاده از setState قابل تغییر است.
+
+**سؤال ۴۷: اگر صفحه‌ای فقط اطلاعات دریافت‌شده را نمایش دهد و وضعیت داخلی آن تغییر نکند، کدام نوع Widget مناسب‌تر است؟**
+
+پاسخ: StatelessWidget.
+
+**سؤال ۴۸: چرا استفاده از Regular Expression در اعتبارسنجی ایمیل کاربرد دارد؟**
+
+پاسخ: برای بررسی تطابق ساختار ایمیل واردشده با یک الگوی مشخص.
+
+**سؤال ۴۹: اگر کاربر یک فرم را چند بار ارسال کند، چه مشکلی ممکن است ایجاد شود؟**
+
+پاسخ: ممکن است عملیات تکراری مانند ثبت چندباره اطلاعات در سرور اتفاق بیفتد. باید هنگام ارسال، دکمه غیرفعال شود یا وضعیت ارسال مدیریت گردد.
+
+**سؤال ۵۰: مهم‌ترین ویژگی یک فرم استاندارد در اپلیکیشن موبایل چیست؟**
+
+پاسخ: طراحی مناسب، دریافت ورودی صحیح، اعتبارسنجی دقیق، نمایش پیام خطای قابل فهم، مدیریت وضعیت ارسال و رعایت امنیت اطلاعات.
+
+---
+
+# بخش ششم: پروژه عملی پایان جلسه
+
+## پروژه: طراحی اپلیکیشن ثبت‌نام دانشجویان
+
+در این پروژه باید یک اپلیکیشن ساده با Flutter طراحی کنید که شامل صفحات زیر باشد:
+
+### صفحه اول: صفحه اصلی
+
+- عنوان برنامه
+- دکمه ورود
+- دکمه ثبت‌نام
+- دکمه درباره برنامه
+
+### صفحه دوم: ثبت‌نام دانشجو
+
+فیلدهای مورد نیاز:
+
+- نام و نام خانوادگی
+- شماره دانشجویی
+- شماره تلفن
+- ایمیل
+- رمز عبور
+
