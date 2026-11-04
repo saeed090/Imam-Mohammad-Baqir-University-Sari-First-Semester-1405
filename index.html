@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>کتاب‌خوان جزوات دانشگاه امام محمد باقر (ع) ساری</title>
+    
+    <!-- فونت فارسی وزیرمتن -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'sans-serif'],
+                    },
+                    colors: {
+                        paper: {
+                            bg: '#f4efe6',
+                            page: '#fdfaf6',
+                            sidebar: '#ebe4d8',
+                            border: '#dcd3c2',
+                            accent: '#8c5a32',
+                            text: '#2c2623',
+                        },
+                        darkpaper: {
+                            bg: '#121314',
+                            page: '#1c1e1f',
+                            sidebar: '#161819',
+                            border: '#2d3133',
+                            accent: '#d49a6a',
+                            text: '#e4e2dd',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- کتابخانه تبدیل Markdown به HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        :root {
+            --book-font-size: 17px;
+        }
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* استایل اختصاصی متن کتاب برای موبایل و دسکتاپ */
+        .book-content {
+            font-size: var(--book-font-size);
+            line-height: 2.1;
+            direction: auto;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+        .book-content h1 {
+            font-size: 1.55em;
+            font-weight: 800;
+            margin-top: 0.5em;
+            margin-bottom: 0.75em;
+            line-height: 1.5;
+            color: #8c5a32;
+        }
+        .dark .book-content h1,
+        .dark .book-content h2,
+        .dark .book-content h3,
+        .dark .book-content h4 {
+            color: #d49a6a;
+        }
+        .book-content h2 {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-top: 1.4em;
+            margin-bottom: 0.6em;
+            line-height: 1.5;
+            color: #8c5a32;
+        }
+        .book-content h3, .book-content h4 {
+            font-size: 1.12em;
+            font-weight: 700;
+            margin-top: 1.2em;
+            margin-bottom: 0.5em;
+            color: #8c5a32;
+        }
+        .book-content p {
+            margin-bottom: 1.2em;
+            text-align: justify;
+        }
+        .book-content ul, .book-content ol {
+            margin-bottom: 1.2em;
+            padding-right: 1.5rem;
+        }
+        .book-content ul { list-style-type: disc; }
+        .book-content ol { list-style-type: decimal; }
+        .book-content li { margin-bottom: 0.4em; }
+        .book-content hr {
+            border-color: #dcd3c2;
+            margin: 1.8em 0;
+        }
+        .dark .book-content hr {
+            border-color: #2d3133;
+        }
+        .book-content pre {
+            background: #1e2227;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            overflow-x: auto;
+            direction: ltr;
+            text-align: left;
+            margin: 1.2em 0;
+            font-size: 0.85em;
+            line-height: 1.6;
+        }
+        .book-content code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background: rgba(140, 90, 50, 0.14);
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.35rem;
+            direction: ltr;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+        .book-content pre code {
+            background: transparent;
+            padding: 0;
+        }
+        .book-content blockquote {
+            border-right: 4px solid #8c5a32;
+            background: rgba(140, 90, 50, 0.06);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem 0 0 0.5rem;
+            margin: 1.2em 0;
+        }
+        .dark .book-content blockquote {
+            border-right-color: #d49a6a;
+            background: rgba(212, 154, 106, 0.08);
+        }
+        .book-content table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            border-collapse: collapse;
+            margin: 1.5em 0;
+            font-size: 0.9em;
+        }
+        .book-content th, .book-content td {
+            border: 1px solid #dcd3c2;
+            padding: 0.6rem 0.8rem;
+        }
+        .dark .book-content th, .dark .book-content td {
+            border-color: #2d3133;
+        }
+        .book-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            margin: 1.5rem auto;
+            display: block;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-paper-bg dark:bg-darkpaper-bg text-paper-text dark:text-darkpaper-text h-[100dvh] flex overflow-hidden transition-colors duration-200">
+
+    <!-- لایه تیره پشت منو در موبایل (Backdrop) -->
+    <div id="backdrop" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-30 hidden lg:hidden transition-opacity"></div>
+
+    <!-- منوی کناری (فهرست دروس) -->
+    <aside id="sidebar" class="fixed lg:static inset-y-0 right-0 z-40 w-[85vw] max-w-[320px] lg:w-80 bg-paper-sidebar dark:bg-darkpaper-sidebar border-l border-paper-border dark:border-darkpaper-border flex flex-col transform translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out shadow-2xl lg:shadow-none">
+        
+        <!-- هدر منو -->
+        <div class="p-4 border-b border-paper-border dark:border-darkpaper-border flex items-center justify-between">
+            <div>
+                <h1 class="font-bold text-sm sm:text-base text-paper-accent dark:text-darkpaper-accent">📚 جزوات نیمسال اول ۱۴۰۵</h1>
+                <p class="text-xs opacity-75 mt-0.5">دانشگاه امام محمد باقر (ع) ساری</p>
+            </div>
+            <!-- دکمه بستن منو در موبایل -->
+            <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg bg-paper-page dark:bg-darkpaper-page border border-paper-border dark:border-darkpaper-border text-sm">
+                ✕
+            </button>
+        </div>
+
+        <!-- جعبه جستجو -->
+        <div class="p-3 border-b border-paper-border dark:border-darkpaper-border">
+            <input type="text" id="searchInput" oninput="filterTOC()" placeholder="🔍 جستجو در نام درس یا جزوه..." 
+                class="w-full px-3 py-2 text-sm rounded-lg bg-paper-page dark:bg-darkpaper-page border border-paper-border dark:border-darkpaper-border focus:outline-none focus:ring-2 focus:ring-paper-accent dark:focus:ring-darkpaper-accent">
+        </div>
+
+        <!-- لیست درختی پوشه‌ها و جزوات -->
+        <div id="toc" class="flex-1 overflow-y-auto p-3 space-y-2 text-sm">
+            <div class="text-center py-8 opacity-70">در حال دریافت لیست دروس...</div>
+        </div>
+    </aside>
+
+    <!-- بخش اصلی صفحه -->
+    <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+        
+        <!-- نوار ابزار بالا (کاملاً رسپانسیو برای موبایل) -->
+        <header class="h-14 sm:h-16 bg-paper-page dark:bg-darkpaper-page border-b border-paper-border dark:border-darkpaper-border px-2.5 sm:px-5 flex items-center justify-between gap-2 shrink-0 z-20">
+            
+            <!-- سمت راست: دکمه منو + عنوان جزوه -->
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+                <button onclick="toggleSidebar()" class="shrink-0 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg bg-paper-sidebar dark:bg-darkpaper-sidebar border border-paper-border dark:border-darkpaper-border hover:bg-paper-accent hover:text-white transition text-xs sm:text-sm font-medium flex items-center gap-1.5">
+                    <span class="text-base leading-none">☰</span>
+                    <span>فهرست</span>
+                </button>
+
+                <!-- عنوان دو خطی با قابلیت Truncate برای جلوگیری از به هم ریختن موبایل -->
+                <div class="min-w-0 flex-1 pr-1">
+                    <div id="currentFolder" class="text-[10px] sm:text-xs opacity-65 truncate" dir="auto">دانشگاه امام محمد باقر (ع)</div>
+                    <div id="currentTitle" class="text-xs sm:text-sm font-bold text-paper-accent dark:text-darkpaper-accent truncate" dir="auto">خوش آمدید</div>
+                </div>
+            </div>
+
+            <!-- سمت چپ: دکمه‌های کنترل اندازه فونت و حالت شب -->
+            <div class="flex items-center gap-1 sm:gap-1.5 shrink-0">
+                <button onclick="changeFontSize(2)" title="بزرگ کردن متن" class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-paper-sidebar dark:bg-darkpaper-sidebar border border-paper-border dark:border-darkpaper-border flex items-center justify-center text-xs sm:text-sm font-bold active:scale-95 transition">
+                    +A
+                </button>
+                <button onclick="changeFontSize(-2)" title="کوچک کردن متن" class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-paper-sidebar dark:bg-darkpaper-sidebar border border-paper-border dark:border-darkpaper-border flex items-center justify-center text-xs sm:text-sm font-bold active:scale-95 transition">
+                    -A
+                </button>
+                <button onclick="toggleTheme()" title="تغییر حالت شب و روز" class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-paper-sidebar dark:bg-darkpaper-sidebar border border-paper-border dark:border-darkpaper-border flex items-center justify-center text-sm active:scale-95 transition">
+                    <span id="themeIcon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- نوار پیشرفت مطالعه (Progress Bar) -->
+        <div class="w-full h-1 bg-paper-border dark:bg-darkpaper-border shrink-0">
+            <div id="progressBar" class="h-full bg-paper-accent dark:bg-darkpaper-accent w-0 transition-all duration-150"></div>
+        </div>
+
+        <!-- محیط ورق زدن و مطالعه کتاب -->
+        <main id="viewport" onscroll="updateProgress()" class="flex-1 overflow-y-auto p-2.5 sm:p-6 md:p-8">
+            <article id="pageContent" class="book-content max-w-3xl mx-auto bg-paper-page dark:bg-darkpaper-page border border-paper-border dark:border-darkpaper-border rounded-xl sm:rounded-2xl shadow-md p-4 sm:p-8 md:p-12 min-h-full">
+                <div class="text-center py-12 opacity-75">در حال آماده‌سازی کتاب‌خوان... 📖</div>
+            </article>
+        </main>
+    </div>
+
+    <script>
+        const REPO_OWNER = 'alihamidi85';
+        const REPO_NAME = 'Imam-Mohammad-Baqir-University-Sari-First-Semester-1405';
+        const BRANCH = 'main';
+        let allFiles = [];
+        let currentIndex = -1;
+        let currentFontSize = window.innerWidth < 640 ? 16 : 18;
+        document.documentElement.style.setProperty('--book-font-size', currentFontSize + 'px');
+
+        function encodeGitHubPath(path) {
+            return path.split('/').map(segment => encodeURIComponent(segment)).join('/');
+        }
+
+        // دریافت لیست تمام پوشه‌ها و جزوات از گیت‌هاب
+        async function fetchRepoFiles() {
+            const tocElement = document.getElementById('toc');
+            try {
+                const treeRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/${BRANCH}?recursive=1`);
+                if (!treeRes.ok) throw new Error('خطا در دریافت اطلاعات از گیت‌هاب');
+                const treeData = await treeRes.json();
+
+                allFiles = treeData.tree.filter(item => 
+                    item.type === 'blob' && 
+                    item.path.toLowerCase() !== 'index.html' &&
+                    !item.path.split('/').some(part => part.startsWith('.'))
+                ).map(item => {
+                    const parts = item.path.split('/');
+                    const fileName = parts.pop();
+                    const folderName = parts.length > 0 ? parts.join(' / ') : 'صفحه اصلی';
+                    return {
+                        path: item.path,
+                        name: fileName,
+                        folder: folderName,
+                        rawUrl: `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/${encodeGitHubPath(item.path)}`,
+                        githubUrl: `https://github.com/${REPO_OWNER}/${REPO_NAME}/blob/${BRANCH}/${encodeGitHubPath(item.path)}`
+                    };
+                });
+
+                renderTOC(allFiles);
+
+                const readmeIndex = allFiles.findIndex(f => f.name.toLowerCase() === 'readme.md');
+                if (readmeIndex !== -1) {
+                    loadFile(readmeIndex, false);
+                } else if (allFiles.length > 0) {
+                    loadFile(0, false);
+                }
+            } catch (err) {
+                tocElement.innerHTML = `<div class="p-3 text-red-600 bg-red-100 rounded-lg text-xs">${err.message}</div>`;
+            }
+        }
+
+        // ساخت فهرست آکاردئونی دروس
+        function renderTOC(files) {
+            const tocElement = document.getElementById('toc');
+            tocElement.innerHTML = '';
+
+            if (files.length === 0) {
+                tocElement.innerHTML = '<div class="text-center py-4 opacity-60">موردی یافت نشد.</div>';
+                return;
+            }
+
+            const grouped = {};
+            files.forEach(file => {
+                const realIndex = allFiles.indexOf(file);
+                if (!grouped[file.folder]) grouped[file.folder] = [];
+                grouped[file.folder].push({ ...file, index: realIndex });
+            });
+
+            for (const folder in grouped) {
+                const details = document.createElement('details');
+                details.className = 'group rounded-xl border border-paper-border dark:border-darkpaper-border bg-paper-page/60 dark:bg-darkpaper-page/50 overflow-hidden';
+                details.open = true;
+
+                const summary = document.createElement('summary');
+                summary.className = 'px-3 py-2.5 font-bold text-xs sm:text-sm text-paper-accent dark:text-darkpaper-accent cursor-pointer flex items-center justify-between select-none hover:bg-black/5 dark:hover:bg-white/5';
+                summary.innerHTML = `
+                    <span class="truncate" dir="auto">📁 ${folder}</span>
+                    <span class="text-[11px] px-2 py-0.5 rounded-full bg-paper-sidebar dark:bg-darkpaper-sidebar opacity-80 shrink-0">${grouped[folder].length}</span>
+                `;
+                details.appendChild(summary);
+
+                const ul = document.createElement('ul');
+                ul.className = 'p-1.5 space-y-1 border-t border-paper-border dark:border-darkpaper-border';
+
+                grouped[folder].forEach(file => {
+                    const isActive = file.index === currentIndex;
+                    const li = document.createElement('li');
+                    li.id = `toc-item-${file.index}`;
+                    li.className = `toc-item px-2.5 py-2 rounded-lg cursor-pointer text-xs sm:text-sm flex items-center gap-2 transition ${
+                        isActive ? 'bg-paper-accent dark:bg-darkpaper-accent text-white font-bold' : 'hover:bg-black/5 dark:hover:bg-white/5'
+                    }`;
+                    
+                    let icon = '📖';
+                    if (/\.pdf$/i.test(file.name)) icon = '📕';
+                    else if (/\.(png|jpg|jpeg|webp|gif)$/i.test(file.name)) icon = '🖼️';
+
+                    li.innerHTML = `<span class="shrink-0">${icon}</span> <span class="truncate" dir="auto">${file.name}</span>`;
+                    li.onclick = () => loadFile(file.index, true);
+                    ul.appendChild(li);
+                });
+
+                details.appendChild(ul);
+                tocElement.appendChild(details);
+            }
+        }
+
+        // بارگذاری و نمایش جزوه
+        async function loadFile(index, closeMenuOnMobile = true) {
+            currentIndex = index;
+            const file = allFiles[index];
+            const pageContent = document.getElementById('pageContent');
+            
+            document.getElementById('currentFolder').innerText = file.folder;
+            document.getElementById('currentTitle').innerText = file.name;
+
+            // بروزرسانی آیتم فعال در منو
+            document.querySelectorAll('.toc-item').forEach(el => {
+                el.className = 'toc-item px-2.5 py-2 rounded-lg cursor-pointer text-xs sm:text-sm flex items-center gap-2 transition hover:bg-black/5 dark:hover:bg-white/5';
+            });
+            const activeItem = document.getElementById(`toc-item-${index}`);
+            if (activeItem) {
+                activeItem.className = 'toc-item px-2.5 py-2 rounded-lg cursor-pointer text-xs sm:text-sm flex items-center gap-2 transition bg-paper-accent dark:bg-darkpaper-accent text-white font-bold';
+            }
+
+            if (closeMenuOnMobile && window.innerWidth < 1024) {
+                closeSidebar();
+            }
+
+            pageContent.innerHTML = '<div class="py-16 text-center opacity-70 animate-pulse">⏳ در حال بارگذاری متن جزوه...</div>';
+            document.getElementById('viewport').scrollTop = 0;
+            updateProgress();
+
+            const ext = file.name.includes('.') ? file.name.split('.').pop().toLowerCase() : '';
+            let contentHTML = '';
+
+            try {
+                if (ext === 'pdf') {
+                    const pdfViewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(file.rawUrl)}&embedded=true`;
+                    contentHTML = `
+                        <div class="mb-4 flex justify-between items-center bg-paper-sidebar dark:bg-darkpaper-sidebar p-3 rounded-xl">
+                            <span class="text-xs sm:text-sm font-bold">فایل PDF</span>
+                            <a href="${file.rawUrl}" target="_blank" class="px-3 py-1.5 rounded-lg bg-paper-accent text-white text-xs font-bold">📥 دانلود مستقیم</a>
+                        </div>
+                        <iframe class="w-full h-[70vh] rounded-xl border border-paper-border" src="${pdfViewerUrl}"></iframe>
+                    `;
+                } 
+                else if (['png', 'jpg', 'jpeg', 'webp', 'gif'].includes(ext)) {
+                    contentHTML = `<img src="${file.rawUrl}" alt="${file.name}">`;
+                } 
+                else {
+                    const res = await fetch(file.rawUrl);
+                    const buffer = await res.arrayBuffer();
+                    const bytes = new Uint8Array(buffer.slice(0, 4));
+                    const header = String.fromCharCode(...bytes);
+
+                    if (header === '%PDF') {
+                        const pdfViewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(file.rawUrl)}&embedded=true`;
+                        contentHTML = `
+                            <div class="mb-4 flex justify-between items-center bg-paper-sidebar dark:bg-darkpaper-sidebar p-3 rounded-xl">
+                                <span class="text-xs sm:text-sm font-bold">فایل PDF</span>
+                                <a href="${file.rawUrl}" target="_blank" class="px-3 py-1.5 rounded-lg bg-paper-accent text-white text-xs font-bold">📥 دانلود مستقیم</a>
+                            </div>
+                            <iframe class="w-full h-[70vh] rounded-xl border border-paper-border" src="${pdfViewerUrl}"></iframe>
+                        `;
+                    } else {
+                        const decoder = new TextDecoder('utf-8');
+                        const text = decoder.decode(buffer);
+                        contentHTML = marked.parse(text);
+                    }
+                }
+            } catch (e) {
+                contentHTML = `<div class="p-4 rounded-xl bg-red-100 text-red-700 text-sm">خطا در بارگذاری این جزوه. <a href="${file.githubUrl}" target="_blank" class="underline font-bold">مشاهده در گیت‌هاب</a></div>`;
+            }
+
+            // دکمه‌های ورق زدن در پایین صفحه (واکنش‌گرا برای موبایل)
+            contentHTML += `
+                <div class="mt-10 pt-6 border-t border-paper-border dark:border-darkpaper-border grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    ${index > 0 ? `
+                        <button onclick="loadFile(${index - 1}, false)" class="w-full p-3 rounded-xl bg-paper-sidebar dark:bg-darkpaper-sidebar border border-paper-border dark:border-darkpaper-border hover:bg-paper-accent hover:text-white transition text-right flex flex-col">
+                            <span class="text-[11px] opacity-70">➔ جزوه قبلی</span>
+                            <span class="text-xs sm:text-sm font-bold truncate mt-0.5" dir="auto">${allFiles[index - 1].name}</span>
+                        </button>
+                    ` : '<div></div>'}
+                    ${index < allFiles.length - 1 ? `
+                        <button onclick="loadFile(${index + 1}, false)" class="w-full p-3 rounded-xl bg-paper-sidebar dark:bg-darkpaper-sidebar border border-paper-border dark:border-darkpaper-border hover:bg-paper-accent hover:text-white transition text-left flex flex-col">
+                            <span class="text-[11px] opacity-70">جزوه بعدی ⬅</span>
+                            <span class="text-xs sm:text-sm font-bold truncate mt-0.5" dir="auto">${allFiles[index + 1].name}</span>
+                        </button>
+                    ` : '<div></div>'}
+                </div>
+            `;
+
+            pageContent.innerHTML = contentHTML;
+        }
+
+        // نوار پیشرفت مطالعه در بالای صفحه
+        function updateProgress() {
+            const viewport = document.getElementById('viewport');
+            const scrollTop = viewport.scrollTop;
+            const scrollHeight = viewport.scrollHeight - viewport.clientHeight;
+            const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // جستجو در فهرست
+        function filterTOC() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allFiles.filter(f => f.path.toLowerCase().includes(q));
+            renderTOC(filtered);
+        }
+
+        // تغییر اندازه فونت
+        function changeFontSize(delta) {
+            currentFontSize = Math.min(Math.max(13, currentFontSize + delta), 28);
+            document.documentElement.style.setProperty('--book-font-size', currentFontSize + 'px');
+        }
+
+        // حالت شب و روز
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.innerText = '🌙';
+            } else {
+                html.classList.add('dark');
+                icon.innerText = '☀️';
+            }
+        }
+
+        // باز و بسته کردن منو در موبایل
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const backdrop = document.getElementById('backdrop');
+            const isOpen = !sidebar.classList.contains('translate-x-full');
+            if (isOpen) {
+                closeSidebar();
+            } else {
+                sidebar.classList.remove('translate-x-full');
+                backdrop.classList.remove('hidden');
+            }
+        }
+
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.add('translate-x-full');
+            document.getElementById('backdrop').classList.add('hidden');
+        }
+
+        fetchRepoFiles();
+    </script>
+</body>
+</html>
